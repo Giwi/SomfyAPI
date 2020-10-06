@@ -72,8 +72,18 @@ export class Site {
             }
         });
 
-       /* router.get('/device/:deviceId', async (req, res) => {
-            const device = await this.somfy.getDevice(req.params.deviceId);
+        /**
+         * @api {get} /site/:siteId/device/:deviceId Get device detail
+         * @apiName getDevice
+         * @apiGroup SomfyAPI
+         *
+         * @apiParam {String} siteId Site ID.
+         * @apiParam {String} deviceId Device ID.
+         *
+         * @apiSuccess {Object} devices A Device object
+         */
+        router.get('/site/:siteId/device/:deviceId', async (req, res) => {
+            const device = await this.somfy.getDevice(req.params.siteId, req.params.deviceId);
             if (typeof device !== 'undefined' && 'data' in device) {
                 res.setHeader('Content-Type', 'application/json');
                 res.end(JSON.stringify(device.data));
@@ -82,7 +92,7 @@ export class Site {
                 res.status(504);
                 res.send('Error');
             }
-        });*/
+        });
 
         /**
          * @api {get} /site/:siteId/security/:level Set the security levle

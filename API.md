@@ -5,6 +5,7 @@ Somfy home Protect Rest API
 
  - [SomfyAPI](#SomfyAPI)
    - [](#)
+   - [Get device detail](#Get-device-detail)
    - [Get site detail](#Get-site-detail)
    - [Get site devices](#Get-site-devices)
    - [List your registered sites](#List-your-registered-sites)
@@ -47,6 +48,28 @@ HTTP/1.1 200 OK
     }
 }
 ```
+
+## <a name='Get-device-detail'></a> Get device detail
+[Back to top](#top)
+
+```
+GET /site/:siteId/device/:deviceId
+```
+
+### Parameters - `Parameter`
+
+| Name     | Type       | Description                           |
+|----------|------------|---------------------------------------|
+| siteId | `String` | <p>Site ID.</p> |
+| deviceId | `String` | <p>Device ID.</p> |
+
+### Success response
+
+#### Success response - `Success 200`
+
+| Name     | Type       | Description                           |
+|----------|------------|---------------------------------------|
+| devices | `Object` | <p>A Device object</p> |
 
 ## <a name='Get-site-detail'></a> Get site detail
 [Back to top](#top)

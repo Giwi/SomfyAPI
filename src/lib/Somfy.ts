@@ -143,7 +143,7 @@ export class Somfy {
         }
     }
 
-    async getDevice(deviceId: string) {
+    async getDevice(siteId: string, deviceId: string) {
         let token = await this.updateToken();
         const options = {
             headers: {
@@ -152,7 +152,7 @@ export class Somfy {
             }
         };
         try {
-            return await axios.get(`${this.baseUrl}/device/${deviceId}`, options);
+            return await axios.get(`${this.baseUrl}/site/${siteId}/device/${deviceId}`, options);
         } catch (error) {
             this.logger.error(error.message);
         }

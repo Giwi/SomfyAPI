@@ -1,6 +1,6 @@
 # SomfyAPI
 
-Rest API for Somfy Home Alarm
+Rest API for Somfy Home Protect
 
 ## Prerequisites
 
