@@ -8,7 +8,7 @@ Create a developer account and an app at https://developer.somfy.com/
 
 Get the Consumer Key and the Consumer Secret.
 
-Set the Callback URL to http://<your server>:<port>/redirect, (ie: http://127.0.0.1:3000/redirect)
+Set the Callback URL to `http://<your server>:<port>/redirect`, (ie: http://127.0.0.1:3000/redirect)
 
 Install [NodeJS](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com/getting-started/install) 
  
