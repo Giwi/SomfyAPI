@@ -1,0 +1,7 @@
+{
+  "name": "Somfy API",
+  "version": "1.0.0",
+  "description": "Somfy home Protect Rest API",
+  "title": "Somfy API",
+  "url" : "http://localhost:3000"
+}

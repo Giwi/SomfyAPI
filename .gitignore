@@ -1,1 +1,5 @@
 node_modules
+.idea
+dist
+conf.json
+token.json

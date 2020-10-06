@@ -67,7 +67,7 @@ GET /site/:siteId
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| A | `Object` | <p>site object</p> |
+| site | `Object` | <p>A site object</p> |
 
 ## <a name='Get-site-devices'></a> Get site devices
 [Back to top](#top)
@@ -88,7 +88,7 @@ GET /site/:siteId/device
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| A | `Object` | <p>Device list object</p> |
+| devices | `Object` | <p>A Device list object</p> |
 
 ## <a name='List-your-registered-sites'></a> List your registered sites
 [Back to top](#top)
@@ -103,7 +103,7 @@ GET /site
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| A | `Object[]` | <p>site list</p> |
+| sites | `Object[]` | <p>A site list</p> |
 
 ## <a name='Set-the-security-levle'></a> Set the security levle
 [Back to top](#top)
@@ -125,4 +125,4 @@ GET /site/:siteId/security/:level
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| A | `Object` | <p>Status object</p> |
+| status | `Object` | <p>A Status object</p> |
