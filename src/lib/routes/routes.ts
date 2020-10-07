@@ -1,8 +1,9 @@
 import {Application} from 'express';
 import {Somfy} from '../Somfy';
-import {Auth} from './auth';
 import {Site} from './site';
 import {Logger} from 'winston';
+import {Device} from "./device";
+import {Security} from "./security";
 
 export class Routes {
     somfy: Somfy;
@@ -14,7 +15,8 @@ export class Routes {
     }
 
     routes(app: Application) {
-        app.use('/', new Auth(this.somfy, this.logger).routes());
         app.use('/', new Site(this.somfy, this.logger).routes());
+        app.use('/', new Device(this.somfy, this.logger).routes());
+        app.use('/', new Security(this.somfy, this.logger).routes());
     }
 }

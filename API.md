@@ -1,53 +1,22 @@
 <a name="top"></a>
 # Somfy API v1.0.0
 
-Somfy home Protect Rest API
+Somfy Home Protect Rest API
 
- - [SomfyAPI](#SomfyAPI)
-   - [](#)
+ - [Device](#Device)
    - [Get device detail](#Get-device-detail)
-   - [Get site detail](#Get-site-detail)
    - [Get site devices](#Get-site-devices)
+ - [Security](#Security)
+   - [Get the current security level](#Get-the-current-security-level)
+   - [Set the security level](#Set-the-security-level)
+ - [Site](#Site)
+   - [Get site detail](#Get-site-detail)
    - [List your registered sites](#List-your-registered-sites)
-   - [Set the security levle](#Set-the-security-levle)
 
 ___
 
 
-# <a name='SomfyAPI'></a> SomfyAPI
-
-## <a name=''></a> 
-[Back to top](#top)
-
-```
-GET /auth
-```
-
-### Success response
-
-#### Success response - `Success 200`
-
-| Name     | Type       | Description                           |
-|----------|------------|---------------------------------------|
-| WebPage | `object` | <p>used to authorize your app</p> |
-
-### Success response example
-
-#### Success response example - `Success-Response:`
-
-```json
-HTTP/1.1 200 OK
-{
-    "token": {
-    "access_token": "xxxxxxxxxxxxxxxxxxxxxxxxx",
-    "expires_in": 3600,
-    "token_type": "bearer",
-    "scope": "user.basic api.full oa.site oa.user oa.device oa.devicedefinition level.0",
-    "refresh_token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    "expires_at": "2020-10-06T21:22:17.708Z"
-    }
-}
-```
+# <a name='Device'></a> Device
 
 ## <a name='Get-device-detail'></a> Get device detail
 [Back to top](#top)
@@ -71,27 +40,6 @@ GET /site/:siteId/device/:deviceId
 |----------|------------|---------------------------------------|
 | devices | `Object` | <p>A Device object</p> |
 
-## <a name='Get-site-detail'></a> Get site detail
-[Back to top](#top)
-
-```
-GET /site/:siteId
-```
-
-### Parameters - `Parameter`
-
-| Name     | Type       | Description                           |
-|----------|------------|---------------------------------------|
-| siteId | `String` | <p>Site ID.</p> |
-
-### Success response
-
-#### Success response - `Success 200`
-
-| Name     | Type       | Description                           |
-|----------|------------|---------------------------------------|
-| site | `Object` | <p>A site object</p> |
-
 ## <a name='Get-site-devices'></a> Get site devices
 [Back to top](#top)
 
@@ -113,12 +61,20 @@ GET /site/:siteId/device
 |----------|------------|---------------------------------------|
 | devices | `Object` | <p>A Device list object</p> |
 
-## <a name='List-your-registered-sites'></a> List your registered sites
+# <a name='Security'></a> Security
+
+## <a name='Get-the-current-security-level'></a> Get the current security level
 [Back to top](#top)
 
 ```
-GET /site
+GET /site/:siteId/security/state
 ```
+
+### Parameters - `Parameter`
+
+| Name     | Type       | Description                           |
+|----------|------------|---------------------------------------|
+| siteId | `String` | <p>Site ID.</p> |
 
 ### Success response
 
@@ -126,9 +82,9 @@ GET /site
 
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
-| sites | `Object[]` | <p>A site list</p> |
+| level | `String` | <p>Security level in 'disarmed' | 'armed' | 'partial'.</p> |
 
-## <a name='Set-the-security-levle'></a> Set the security levle
+## <a name='Set-the-security-level'></a> Set the security level
 [Back to top](#top)
 
 ```
@@ -149,3 +105,41 @@ GET /site/:siteId/security/:level
 | Name     | Type       | Description                           |
 |----------|------------|---------------------------------------|
 | status | `Object` | <p>A Status object</p> |
+
+# <a name='Site'></a> Site
+
+## <a name='Get-site-detail'></a> Get site detail
+[Back to top](#top)
+
+```
+GET /site/:siteId
+```
+
+### Parameters - `Parameter`
+
+| Name     | Type       | Description                           |
+|----------|------------|---------------------------------------|
+| siteId | `String` | <p>Site ID.</p> |
+
+### Success response
+
+#### Success response - `Success 200`
+
+| Name     | Type       | Description                           |
+|----------|------------|---------------------------------------|
+| site | `Object` | <p>A site object</p> |
+
+## <a name='List-your-registered-sites'></a> List your registered sites
+[Back to top](#top)
+
+```
+GET /site
+```
+
+### Success response
+
+#### Success response - `Success 200`
+
+| Name     | Type       | Description                           |
+|----------|------------|---------------------------------------|
+| sites | `Object[]` | <p>A site list</p> |

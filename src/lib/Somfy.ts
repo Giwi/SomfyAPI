@@ -1,4 +1,3 @@
-import {AuthorizationCode, ModuleOptions} from 'simple-oauth2';
 import {readFileSync, writeFileSync} from 'fs';
 import axios from 'axios';
 import {Logger} from 'winston';
@@ -6,66 +5,52 @@ import {Logger} from 'winston';
 export class Somfy {
     private conf: any;
     private token: any;
-    private oauth2: AuthorizationCode;
-    private readonly authorizationUri: string;
-    private readonly redirectUrl: string;
     private baseUrl = 'https://api.myfox.io/v3';
     private logger: Logger;
 
     constructor(conf: any, logger: Logger) {
         this.logger = logger;
         this.conf = conf;
-        const oauthConfig: ModuleOptions = {
-            client: {
-                id: this.conf.consumerKey,
-                secret: this.conf.consumerSecret
-            },
-            auth: {
-                tokenHost: 'https://sso.myfox.io',
-                tokenPath: '/oauth/oauth/v2/token',
-                authorizePath: '/oauth/oauth/v2/auth'
-            },
-            options: {
-                authorizationMethod: 'body',
-                bodyFormat: 'json'
-            }
-        };
-
-        this.oauth2 = new AuthorizationCode(oauthConfig);
-        this.redirectUrl = `${this.conf.server}:${this.conf.port}/redirect`;
-        this.authorizationUri = this.oauth2.authorizeURL({redirect_uri: this.redirectUrl});
     }
 
-    getAuthorizationUri() {
-        return this.authorizationUri;
+   private async getNewToken() {
+        const token = await axios.post("https://sso.myfox.io/oauth/oauth/v2/token",{
+            client_id: '84eddf48-2b8e-11e5-b2a5-124cfab25595_475buqrf8v8kgwoo4gow08gkkc0ck80488wo44s8o48sg84k40',
+            client_secret: '4dsqfntieu0wckwwo40kw848gw4o0c8k4owc80k4go0cs0k844',
+            username: this.conf.username,
+            password: this.conf.password,
+            grant_type: 'password'
+        }, {headers: {'Content-Type': 'application/json'}})
+       this.token = token.data;
+        this.token.issuance = new Date().getTime();
+       writeFileSync('token.json', JSON.stringify(this.token));
+       return this.token;
     }
 
-    async createToken(code: string) {
-        if (code !== null) {
-            const options = {code, redirect_uri: this.redirectUrl};
-            try {
-                const result = await this.oauth2.getToken(options);
-                this.token = this.oauth2.createToken(result);
-                writeFileSync('token.json', JSON.stringify(this.token.token));
-                return this.token.token;
-            } catch (error) {
-                this.logger.error('Access Token Error', error.message);
-                return error.message;
-            }
-        } else {
-            this.logger.error('No code authorization!');
-            return 'No code authorization!';
-        }
+    private async getRefreshToken(refreshToken: string) {
+        const token = await axios.post("https://sso.myfox.io/oauth/oauth/v2/token",{
+            client_id: '84eddf48-2b8e-11e5-b2a5-124cfab25595_475buqrf8v8kgwoo4gow08gkkc0ck80488wo44s8o48sg84k40',
+            client_secret: '4dsqfntieu0wckwwo40kw848gw4o0c8k4owc80k4go0cs0k844',
+            refresh_token: refreshToken,
+            grant_type: 'refresh_token'
+        }, {headers: {'Content-Type': 'application/json'}})
+        this.token = token.data;
+        this.token.issuance = new Date().getTime();
+        writeFileSync('token.json', JSON.stringify(this.token));
+        return this.token;
+    }
+
+    private hasExpired() {
+        return this.token.issuance + this.token.expires_in - 1000 < new Date().getTime();
     }
 
     async updateToken() {
-        if (!!this.token && !this.token.expired()) {
-            return this.token.token;
+        if (!!this.token && !this.hasExpired()) {
+            return this.token;
         } else if (!!this.token) {
             try {
-                this.token = await this.token.refresh();
-                writeFileSync('token.json', JSON.stringify(this.token.token));
-                return this.token.token;
+                this.token = await this.getRefreshToken(this.token.refresh_token);
+                return this.token;
             } catch (error) {
                 this.logger.error(error.message);
                 this.logger.error('Need authorization request!');
@@ -75,11 +60,11 @@ export class Somfy {
             try {
                 const data = readFileSync('token.json');
                 this.logger.warn('File token exist');
-                this.token = this.oauth2.createToken(JSON.parse(data.toString()));
-                if (this.token.expired()) {
+                this.token = JSON.parse(data.toString());
+                if (this.hasExpired()) {
                     try {
-                        this.token = await this.token.refresh();
-                        writeFileSync('token.json', JSON.stringify(this.token.token));
+                        this.token = await this.getRefreshToken(this.token.refresh_token);
+                        writeFileSync('token.json', JSON.stringify(this.token));
                     } catch (error) {
                         this.logger.error(error.message);
                         this.logger.error('Need authorization request!');
@@ -87,11 +72,18 @@ export class Somfy {
                     }
                 }
                 this.logger.info('Return token');
-                return this.token.token;
+                return this.token;
             } catch (error) {
-                this.logger.error(error.message);
-                this.logger.error('Need authorization request!');
-                return error.message;
+                try {
+                    this.token = this.getNewToken();
+                    return this.token;
+
+                } catch (e) {
+                    this.logger.error(e);
+                    this.logger.error(error.message);
+                    this.logger.error('Need authorization request!');
+
+                }
             }
         }
     }
@@ -101,7 +93,7 @@ export class Somfy {
         const options = {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token.token.access_token}`,
+                'Authorization': `Bearer ${token.access_token}`,
             }
         };
         try {
@@ -118,7 +110,7 @@ export class Somfy {
         const options = {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token.token.access_token}`,
+                'Authorization': `Bearer ${token.access_token}`,
             }
         };
         try {
@@ -133,7 +125,7 @@ export class Somfy {
         const options = {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token.token.access_token}`,
+                'Authorization': `Bearer ${token.access_token}`,
             }
         };
         try {
@@ -148,7 +140,7 @@ export class Somfy {
         const options = {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token.token.access_token}`,
+                'Authorization': `Bearer ${token.access_token}`,
             }
         };
         try {
@@ -163,7 +155,7 @@ export class Somfy {
         const options = {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token.token.access_token}`,
+                'Authorization': `Bearer ${token.access_token}`,
             }
         };
         try {

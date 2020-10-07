@@ -2,14 +2,6 @@
 
 Rest API for Somfy Home Protect
 
-## Prerequisites
-
-Create a developer account and an app at https://developer.somfy.com/
-
-Get the Consumer Key and the Consumer Secret.
-
-Set the Callback URL to `http://<your server>:<port>/redirect`, (ie: http://127.0.0.1:3000/redirect)
-
 Install [NodeJS](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com/getting-started/install) 
  
 ## Setup
@@ -17,28 +9,28 @@ Install [NodeJS](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com
 Copy `conf.template.json` to `conf.json` and complete data:
 
     {
-      "consumerKey": "<your consumer key>",
-      "consumerSecret": "<your consumer secret>",
       "server": "http://127.0.0.1",
-      "port": 3000
+      "port": 3000,
+      "username": "my.somfy@account.com",
+      "password": "myPassword"
+      "client_id": "xxxxxx",
+      "client_secret": "xxxx"
     }
 
-Your server address must match the callback url: 
-
-    "server": "http://127.0.0.1",
-    "port": 3000
-
-Callback url: `http://127.0.0.1:3000/redirect`;
+For `client_id` and `client_secret`, see https://github.com/Mystikal57/Somfy_Home_ALARM_API/issues/2
 
 Then:
 
     $ yarn install
     $ yarn dev
 
-Open your browser to http://127.0.0.1:3000 to authorize your app.
 
 Now explore the [API](./API.md)
 
 ## Contribute
 
 Contribution via pull requests are welcome. 
+
+## Great thanks to
+
+- https://github.com/Mystikal57/Somfy_Home_ALARM_API
