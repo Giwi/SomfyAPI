@@ -2,8 +2,8 @@ import {Application} from 'express';
 import {Somfy} from '../Somfy';
 import {Site} from './site';
 import {Logger} from 'winston';
-import {Device} from "./device";
-import {Security} from "./security";
+import {Device} from './device';
+import {Security} from './security';
 
 export class Routes {
     somfy: Somfy;

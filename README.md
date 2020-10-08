@@ -2,7 +2,7 @@
 
 Rest API for Somfy Home Protect
 
-Install [NodeJS](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com/getting-started/install) 
+Install [NodeJS](https://nodejs.org/en/download/) 
  
 ## Setup
 
@@ -21,8 +21,8 @@ For `client_id` and `client_secret`, see https://github.com/Mystikal57/Somfy_Hom
 
 Then:
 
-    $ yarn install
-    $ yarn dev
+    $ npm install
+    $ npm run start
 
 
 Now explore the [API](./API.md)

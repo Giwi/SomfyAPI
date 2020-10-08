@@ -14,7 +14,7 @@ export class Somfy {
     }
 
    private async getNewToken() {
-        const token = await axios.post("https://sso.myfox.io/oauth/oauth/v2/token",{
+        const token = await axios.post('https://sso.myfox.io/oauth/oauth/v2/token',{
             client_id: '84eddf48-2b8e-11e5-b2a5-124cfab25595_475buqrf8v8kgwoo4gow08gkkc0ck80488wo44s8o48sg84k40',
             client_secret: '4dsqfntieu0wckwwo40kw848gw4o0c8k4owc80k4go0cs0k844',
             username: this.conf.username,
@@ -28,7 +28,7 @@ export class Somfy {
     }
 
     private async getRefreshToken(refreshToken: string) {
-        const token = await axios.post("https://sso.myfox.io/oauth/oauth/v2/token",{
+        const token = await axios.post('https://sso.myfox.io/oauth/oauth/v2/token',{
             client_id: '84eddf48-2b8e-11e5-b2a5-124cfab25595_475buqrf8v8kgwoo4gow08gkkc0ck80488wo44s8o48sg84k40',
             client_secret: '4dsqfntieu0wckwwo40kw848gw4o0c8k4owc80k4go0cs0k844',
             refresh_token: refreshToken,
@@ -97,9 +97,7 @@ export class Somfy {
             }
         };
         try {
-            let data = await axios.get(`${this.baseUrl}/site`, options);
-            this.logger.info(data)
-            return data
+            return await axios.get(`${this.baseUrl}/site`, options)
         } catch (error) {
             this.logger.error(error.message);
         }
@@ -136,7 +134,7 @@ export class Somfy {
     }
 
     async getDevice(siteId: string, deviceId: string) {
-        let token = await this.updateToken();
+        const token = await this.updateToken();
         const options = {
             headers: {
                 'Content-Type': 'application/json',

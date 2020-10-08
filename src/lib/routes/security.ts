@@ -1,6 +1,6 @@
-import {Somfy} from "../Somfy";
-import {Logger} from "winston";
-import {Router} from "express";
+import {Somfy} from '../Somfy';
+import {Logger} from 'winston';
+import {Router} from 'express';
 
 export class Security {
     somfy: Somfy;
