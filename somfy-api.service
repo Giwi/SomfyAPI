@@ -1,0 +1,14 @@
+[Unit]
+Description=Somfy API
+
+[Service]
+ExecStart=/usr/bin/node dist/src/index.js
+Restart=always
+User=pi
+Group=pi
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=NODE_ENV=production
+WorkingDirectory=/home/pi/workspace/SomfyAPI
+StartLimitBurst=0
+[Install]
+WantedBy=multi-user.target
