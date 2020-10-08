@@ -59,6 +59,46 @@ Then enable it and start it:
     $ npm run build
     $ sudo systemctl restart somfy-api
 
+## With Jeedom
+
+First install this server somewhere (ideally on the same server as Jeedom, I assume that is the case) and start it as a service.
+
+You will need you site Id : 
+
+`http://<ip of you jeedom server>:3000/sitepretty`
+
+In most cases, there is only one site in the response:
+
+    [
+        {
+            "Maison": "<site id>"
+        }
+    ]
+    
+Then use the [Jeedom script plugin](https://doc.jeedom.com/fr_FR/plugins/programming/script/)
+and create a virtual device:
+
+![01](assets/01.png)
+
+Then, add two commands:
+
+![02](assets/02.png)
+
+with those urls:
+
+- Turn alarm on: `http://<ip of you jeedom server>:3000/site/<your site id>/security/armed`
+- Turn alarm off: `http://<ip of you jeedom server>:3000/site/<your site id>/security/disarmed` 
+
+> You can use `armed`, `partial` and `disarmed`
+
+That's all, you can now use this virtual device in your scenarios.
+
+To fetch the state, you can call `http://<ip of you jeedom server>:3000/site/<your site id>/security/state`: 
+
+    {
+        "status": "disarmed"
+    }
+
 ## Contribute
 
 Contribution via pull requests are welcome. 

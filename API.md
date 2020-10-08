@@ -12,6 +12,7 @@ Somfy Home Protect Rest API
  - [Site](#Site)
    - [Get site detail](#Get-site-detail)
    - [List your registered sites](#List-your-registered-sites)
+   - [List your registered sites in a pretty way](#List-your-registered-sites-in-a-pretty-way)
 
 ___
 
@@ -134,6 +135,21 @@ GET /site/:siteId
 
 ```
 GET /site
+```
+
+### Success response
+
+#### Success response - `Success 200`
+
+| Name     | Type       | Description                           |
+|----------|------------|---------------------------------------|
+| sites | `Object[]` | <p>A site list</p> |
+
+## <a name='List-your-registered-sites-in-a-pretty-way'></a> List your registered sites in a pretty way
+[Back to top](#top)
+
+```
+GET /sitepretty
 ```
 
 ### Success response

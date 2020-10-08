@@ -30,6 +30,28 @@ export class Site {
                 res.send('Error');
             }
         });
+        /**
+         * @api {get} /sitepretty List your registered sites in a pretty way
+         * @apiName getALLSitesPretty
+         * @apiGroup Site
+         *
+         * @apiSuccess {Object[]} sites A site list
+         */
+        router.get('/sitepretty', async (req, res) => {
+            const sites = await this.somfy.getALLSites()
+            if (typeof sites !== 'undefined' && 'data' in sites) {
+                res.setHeader('Content-Type', 'application/json');
+                const result = sites.data.items.map((s: any) => {
+                    const site: any = {};
+                    site[s.label] = s.site_id;
+                    return site;
+                });
+                res.end(JSON.stringify(result));
+            } else {
+                res.status(504);
+                res.send('Error');
+            }
+        });
 
         /**
          * @api {get} /site/:siteId Get site detail
