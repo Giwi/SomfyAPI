@@ -26,12 +26,38 @@ Then:
 
 Now explore the [API](./API.md)
 
-You can install it as a service (modify `somfy-api.service` according to your installation path)
+### Install as a service
+
+Create in the code root folder a file named `somfy-api.service` and modify this sample according to your installation path
+
+    [Unit]
+    Description=Somfy API
+    
+    [Service]
+    ExecStart=/usr/bin/node dist/src/index.js
+    Restart=always
+    User=pi
+    Group=pi
+    Environment=PATH=/usr/bin:/usr/local/bin
+    Environment=NODE_ENV=production
+    WorkingDirectory=/home/pi/workspace/SomfyAPI
+    StartLimitBurst=0
+    [Install]
+    WantedBy=multi-user.target
+
+Then enable it and start it:
 
     $ npm run build
     $ sudo systemctl link ./somfy-api.service
     $ sudo systemctl enable somfy-api
     $ sudo systemctl start somfy-api
+    $ journalctl -f -u somfy-api.service
+    
+### Update
+
+    $ git pull origin main
+    $ npm run build
+    $ sudo systemctl restart somfy-api
 
 ## Contribute
 

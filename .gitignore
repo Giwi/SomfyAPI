@@ -3,3 +3,4 @@ node_modules
 dist
 conf.json
 token.json
+somfy-api.service
