@@ -4,7 +4,7 @@ import {Routes} from './lib/routes/routes';
 import {Somfy} from './lib/Somfy';
 import {Logger} from 'winston';
 import cors from 'cors';
-import morgan from "morgan";
+import morgan from 'morgan';
 
 export class App {
 

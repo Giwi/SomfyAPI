@@ -3,7 +3,7 @@ import {App} from './app';
 import conf from '../conf.json';
 import util from 'util';
 import {createLogger, format, transports} from 'winston';
-import path from "path";
+import path from 'path';
 
 const PORT = process.env.PORT || conf.port;
 const logFormat = format.printf(info => {
