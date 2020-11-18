@@ -28,7 +28,7 @@ export class Security {
             const site = await this.somfy.getSite(req.params.siteId);
             if (typeof site !== 'undefined' && 'data' in site) {
                 res.setHeader('Content-Type', 'text/plain');
-                res.end('' + site.data.security_level === 'armed');
+                res.end(''+ (site.data.security_level === 'armed'));
             } else {
                 res.status(504);
                 res.send('Error');
