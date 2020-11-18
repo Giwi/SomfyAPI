@@ -27,8 +27,8 @@ export class Security {
         router.get('/site/:siteId/security/state', async (req, res) => {
             const site = await this.somfy.getSite(req.params.siteId);
             if (typeof site !== 'undefined' && 'data' in site) {
-                res.setHeader('Content-Type', 'application/json');
-                res.end(JSON.stringify({status: site.data.security_level}));
+                res.setHeader('Content-Type', 'text/plain');
+                res.end(site.data.security_level === 'armed');
             } else {
                 res.status(504);
                 res.send('Error');
