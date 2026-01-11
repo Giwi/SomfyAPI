@@ -28,4 +28,6 @@ const logger = createLogger({
     })],
 });
 
-new App(conf, logger).app.listen(PORT, () => logger.info(`SomfyAPI listening on ${conf.server}:${PORT}`));
+new App(conf, logger)
+    .app.listen(PORT, () =>
+    logger.info(`SomfyAPI listening on ${conf.server}:${PORT}`));
