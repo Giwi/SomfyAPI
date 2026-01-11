@@ -34,8 +34,8 @@ export class Somfy {
     private async getNewToken() {
         this.logger.info('Get a new token');
         const token = await axios.post('https://sso.myfox.io/oauth/oauth/v2/token', {
-            client_id: '84eddf48-2b8e-11e5-b2a5-124cfab25595_475buqrf8v8kgwoo4gow08gkkc0ck80488wo44s8o48sg84k40',
-            client_secret: '4dsqfntieu0wckwwo40kw848gw4o0c8k4owc80k4go0cs0k844',
+            client_id: this.conf.client_id,
+            client_secret: this.conf.client_secret,
             username: this.conf.username,
             password: this.conf.password,
             grant_type: 'password'
@@ -48,8 +48,8 @@ export class Somfy {
 
     private async getRefreshToken(refreshToken: string) {
         const token = await axios.post('https://sso.myfox.io/oauth/oauth/v2/token', {
-            client_id: '84eddf48-2b8e-11e5-b2a5-124cfab25595_475buqrf8v8kgwoo4gow08gkkc0ck80488wo44s8o48sg84k40',
-            client_secret: '4dsqfntieu0wckwwo40kw848gw4o0c8k4owc80k4go0cs0k844',
+            client_id: this.conf.client_id,
+            client_secret: this.conf.client_secret,
             refresh_token: refreshToken,
             grant_type: 'refresh_token'
         })
