@@ -1,6 +1,6 @@
-import {readFileSync, writeFileSync} from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import axios from 'axios';
-import {Logger} from 'winston';
+import { Logger } from 'winston';
 
 export class Somfy {
     private conf: any;
@@ -32,6 +32,7 @@ export class Somfy {
     }
 
     private async getNewToken() {
+        this.logger.info('Get a new token');
         const token = await axios.post('https://sso.myfox.io/oauth/oauth/v2/token', {
             client_id: '84eddf48-2b8e-11e5-b2a5-124cfab25595_475buqrf8v8kgwoo4gow08gkkc0ck80488wo44s8o48sg84k40',
             client_secret: '4dsqfntieu0wckwwo40kw848gw4o0c8k4owc80k4go0cs0k844',
@@ -64,9 +65,11 @@ export class Somfy {
 
     async updateToken() {
         if (!!this.token && !this.hasExpired()) {
+            this.logger.info('Valid token');
             return this.token;
         } else if (!!this.token) {
             try {
+                this.logger.info('Get refresh token');
                 this.token = await this.getRefreshToken(this.token.refresh_token);
                 return this.token;
             } catch (error) {
@@ -76,17 +79,21 @@ export class Somfy {
             }
         } else {
             try {
+                this.logger.info('Reading token.json');
                 const data = readFileSync('token.json');
-                this.logger.warn('File token exist');
+                this.logger.info('File token.json exists');
                 this.token = JSON.parse(data.toString());
                 if (this.hasExpired()) {
                     try {
+                        this.logger.info('Get refresh token');
                         this.token = await this.getRefreshToken(this.token.refresh_token);
                         writeFileSync('token.json', JSON.stringify(this.token));
                     } catch (error) {
                         this.logger.error(error.message);
                         this.logger.error('Need authorization request!');
-                        return error.message;
+                        // return error.message;
+                        this.token = this.getNewToken();
+                        return this.token;
                     }
                 }
                 this.logger.info('Return token');
@@ -95,12 +102,10 @@ export class Somfy {
                 try {
                     this.token = this.getNewToken();
                     return this.token;
-
                 } catch (e) {
                     this.logger.error(e);
                     this.logger.error(error.message);
                     this.logger.error('Need authorization request!');
-
                 }
             }
         }
@@ -108,7 +113,7 @@ export class Somfy {
 
     async getALLSites() {
         const token = await this.updateToken();
-        const options = {headers: {'Authorization': `Bearer ${token.access_token}`}};
+        const options = { headers: { 'Authorization': `Bearer ${token.access_token}` } };
         try {
             return await axios.get(`${this.baseUrl}/site`, options)
         } catch (error) {
@@ -118,7 +123,7 @@ export class Somfy {
 
     async getSite(siteId: string) {
         const token = await this.updateToken();
-        const options = {headers: {'Authorization': `Bearer ${token.access_token}`}};
+        const options = { headers: { 'Authorization': `Bearer ${token.access_token}` } };
         try {
             return await axios.get(`${this.baseUrl}/site/${siteId}`, options);
         } catch (error) {
@@ -128,7 +133,7 @@ export class Somfy {
 
     async getDevicesFromSiteId(siteId: string) {
         const token = await this.updateToken();
-        const options = {headers: {'Authorization': `Bearer ${token.access_token}`}};
+        const options = { headers: { 'Authorization': `Bearer ${token.access_token}` } };
         try {
             return await axios.get(`${this.baseUrl}/site/${siteId}/device`, options);
         } catch (error) {
@@ -138,7 +143,7 @@ export class Somfy {
 
     async getDevice(siteId: string, deviceId: string) {
         const token = await this.updateToken();
-        const options = {headers: {'Authorization': `Bearer ${token.access_token}`}};
+        const options = { headers: { 'Authorization': `Bearer ${token.access_token}` } };
         try {
             return await axios.get(`${this.baseUrl}/site/${siteId}/device/${deviceId}`, options);
         } catch (error) {
@@ -148,9 +153,9 @@ export class Somfy {
 
     async setSecurityLevel(siteId: string, status: 'disarmed' | 'armed' | 'partial') {
         const token = await this.updateToken();
-        const options = {headers: {'Authorization': `Bearer ${token.access_token}`}};
+        const options = { headers: { 'Authorization': `Bearer ${token.access_token}` } };
         try {
-            return await axios.put(`${this.baseUrl}/site/${siteId}/security`, {status}, options);
+            return await axios.put(`${this.baseUrl}/site/${siteId}/security`, { status }, options);
         } catch (error) {
             this.logger.error(error.message, error);
         }
