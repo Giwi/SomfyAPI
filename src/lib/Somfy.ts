@@ -1,4 +1,4 @@
-// import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import axios from 'axios';
 import { Logger } from 'winston';
 
@@ -42,7 +42,7 @@ export class Somfy {
         })
         this.token = token.data;
         this.token.issuance = new Date().getTime();
-     //   writeFileSync('token.json', JSON.stringify(this.token));
+        writeFileSync('token.json', JSON.stringify(this.token));
         return this.token;
     }
 
@@ -55,7 +55,7 @@ export class Somfy {
         })
         this.token = token.data;
         this.token.issuance = new Date().getTime();
-      //  writeFileSync('token.json', JSON.stringify(this.token));
+        writeFileSync('token.json', JSON.stringify(this.token));
         return this.token;
     }
 
@@ -75,27 +75,28 @@ export class Somfy {
             } catch (error) {
                 this.logger.error(error.message);
                 this.logger.error('Need authorization request!');
-                return error.message;
+                this.token = this.getNewToken();
+                return this.token;
             }
         } else {
             try {
                 this.logger.info('Reading token.json');
-            //    const data = readFileSync('token.json');
+                const data = readFileSync('token.json');
                 this.logger.info('File token.json exists');
-               // this.token = JSON.parse(data.toString());
-             /*   if (this.hasExpired()) {
+                this.token = JSON.parse(data.toString());
+                if (this.hasExpired()) {
                     try {
                         this.logger.info('Get refresh token');
                         this.token = await this.getRefreshToken(this.token.refresh_token);
-                    //    writeFileSync('token.json', JSON.stringify(this.token));
+                        writeFileSync('token.json', JSON.stringify(this.token));
+                        return this.token;
                     } catch (error) {
                         this.logger.error(error.message);
-                        this.logger.error('Need authorization request!'); */
-                        // return error.message;
+                        this.logger.error('Need authorization request!');
                         this.token = this.getNewToken();
                         return this.token;
-        /*            }
-                } */
+                    }
+                }
                 this.logger.info('Return token');
                 return this.token;
             } catch (error) {
